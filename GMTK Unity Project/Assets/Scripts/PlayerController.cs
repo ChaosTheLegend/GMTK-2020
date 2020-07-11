@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed;
     [SerializeField] private int MaxHp;
     [SerializeField] private float imunity;
+    [SerializeField] private bool AutoReload;
+    public float reloadTime;
 
     [SerializeField] private Transform Rotator;
     [SerializeField] private Transform shootingPoint;
@@ -16,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public List<float> Offset;
     public List<float> Length;
 
+    private float reloadtm;
     private float imunetm;
     private enum Side { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
     private Transform trans;
@@ -94,10 +97,18 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
         if(imunetm > 0) imunetm -= Time.deltaTime;
         Rotate();
-        
+        if (reloadtm > 0) reloadtm -= Time.deltaTime;
+        if (!AutoReload && Input.GetMouseButtonDown(0) || AutoReload && Input.GetMouseButton(0))
+        {
+            if (reloadtm <= 0) Shoot();
+        }
     }
 
-
+    private void Shoot()
+    {
+        Instantiate(bullet, shootingPoint.position, shootingPoint.rotation);
+        reloadtm = reloadTime;
+    }
 
     private void OnDrawGizmosSelected()
     {

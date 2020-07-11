@@ -8,13 +8,13 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float AttackRange;
     [SerializeField] private float AttackRate;
     [SerializeField] private int Damage;
+    [SerializeField] private int hp;
 
     private GameObject player;
     private PlayerController plc;
     private Transform trans;
     private float tm;
-
-
+    
     [Header("Collison")]
     public List<float> Offset;
     public List<float> Length;
@@ -24,11 +24,22 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        tm = AttackRate;
         player = GameObject.FindGameObjectWithTag("Player");
         plc = player.GetComponent<PlayerController>();
         trans = transform;
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.gameObject.CompareTag("bullet")) return;
+        int dmg = other.gameObject.GetComponent<BulletController>().Damage;
+        hp -= dmg;
 
+        if(hp <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
     private bool CheckColision(int side)
     {
         Vector2 begin = new Vector2(), end = new Vector2();

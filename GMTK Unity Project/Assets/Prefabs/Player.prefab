@@ -56,7 +56,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1451895223}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.91, y: 0, z: 0}
+  m_LocalPosition: {x: 1.842, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1441416727}
@@ -86,9 +86,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3218267084724727010}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.87, y: -0.73, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.1706, y: 0, z: 0}
+  m_LocalScale: {x: 1.5011466, y: 0.47176442, z: 1}
   m_Children: []
   m_Father: {fileID: 1441416727}
   m_RootOrder: 1
@@ -133,7 +133,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 377e788b3162d174aa41942fc015c98e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.745283, g: 0.30923614, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -290,9 +290,11 @@ MonoBehaviour:
   _moveSpeed: 10
   MaxHp: 10
   imunity: 0.5
-  Rotator: {fileID: 1451895224}
+  AutoReload: 0
+  reloadTime: 0.2
+  Rotator: {fileID: 1441416727}
   shootingPoint: {fileID: 1451895224}
-  bullet: {fileID: 0}
+  bullet: {fileID: 1727452394321485341, guid: a85b6c14ae8205a4c9adfab6a90b9611, type: 3}
   hp: 10
   Offset:
   - 0.53

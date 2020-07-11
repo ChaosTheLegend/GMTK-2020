@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private SpawnPoint[] SpawnPoints;
     [SerializeField] private Wave[] Waves;
+    public UnityEvent onWaveEnd;
+
     private bool isSpawning = false;
+    private bool inProgress = false;
     private int waveId = 0;
     private List<GameObject> SpawnQueue;
     private float tm;
+
 
     private void Start()
     {
@@ -18,6 +22,7 @@ public class EnemySpawner : MonoBehaviour
     public void StartWave()
     {
         SpawnQueue = new List<GameObject>();
+        inProgress = true;
         isSpawning = true;
         Wave w = Waves[waveId];
         int i = 0;
@@ -33,7 +38,11 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        if (SpawnQueue.Count == 0) return;
+        if (SpawnQueue.Count == 0)
+        {
+            StopSpawn();
+            return;
+        }
         List<SpawnPoint> availabe = new List<SpawnPoint>();
         foreach(SpawnPoint sp in SpawnPoints)
         {
@@ -48,9 +57,27 @@ public class EnemySpawner : MonoBehaviour
         SpawnQueue.RemoveAt(randmob);
     }
 
+    private void StopSpawn()
+    {
+        isSpawning = false;
+    }
     void Update()
     {
-        if (!isSpawning) return;
+        if(!inProgress && Waves.Length-1 > waveId)
+        {
+            waveId++;
+            StartWave();
+        }
+
+        if (!isSpawning) {
+            if (!inProgress) return;
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+            {
+                onWaveEnd?.Invoke();
+                inProgress = false;
+            }
+            return;
+        };
         if(tm > 0)
         {
             tm -= Time.deltaTime;
