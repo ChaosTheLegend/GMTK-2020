@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2206b240b1347bb4ead7316443e68922, type: 3}
-  m_Name: new Side
+  m_Name: testSide
   m_EditorClassIdentifier: 
   SideSprite: {fileID: 0}
   id: 0

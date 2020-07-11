@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public List<float> Offset;
     public List<float> Length;
 
+    public int DamageTaken;
     private float reloadtm;
     private float imunetm;
     private enum Side { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
@@ -25,9 +26,15 @@ public class PlayerController : MonoBehaviour
     private Camera cam;
     void Start()
     {
+        DamageTaken = 0;
         cam = Camera.main;
         hp = MaxHp;
         trans = transform;
+    }
+
+    public void ResetDamage()
+    {
+        DamageTaken = 0;
     }
 
     public void takeDamage(int dmg)
@@ -35,6 +42,7 @@ public class PlayerController : MonoBehaviour
         if (imunetm > 0) return;
         imunetm = imunity;
         hp -= dmg;
+        DamageTaken += dmg;
     }
     private bool CheckColision(int side)
     {
