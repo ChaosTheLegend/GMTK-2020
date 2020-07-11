@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float speed;
+    [SerializeField] private float AttackRange;
+    private GameObject player;
+    private Transform trans;
 
     [Header("Collison")]
     public List<float> Offset;
     public List<float> Length;
 
     private enum Side { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
-    private Transform trans;
+
+    // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         trans = transform;
     }
+
     private bool CheckColision(int side)
     {
         Vector2 begin = new Vector2(), end = new Vector2();
@@ -40,40 +46,40 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        RaycastHit2D cast = Physics2D.Linecast(begin, end, LayerMask.GetMask("PlayerSolid"));
-        if(!cast) cast = Physics2D.Linecast(begin, end, LayerMask.GetMask("Solid"));
+        RaycastHit2D cast = Physics2D.Linecast(begin, end, LayerMask.GetMask("Solid"));
         return cast;
     }
-
-    private void MovePlayer()
+    // Update is called once per frame
+    private void Move()
     {
-        float hor = Input.GetAxis("Horizontal");
+        if (!player) return;
+        Vector3 dest = player.transform.position;
+        Vector3 dir = dest - trans.position;
+        if (dir.sqrMagnitude < AttackRange*AttackRange) return;
+        float hor = dir.x;
         if (CheckColision((int)Side.LEFT)) hor = Mathf.Max(0, hor);
         if (CheckColision((int)Side.RIGHT)) hor = Mathf.Min(0, hor);
 
-        float ver = Input.GetAxis("Vertical");
+        float ver = dir.y;
         if (CheckColision((int)Side.DOWN)) ver = Mathf.Max(0, ver);
         if (CheckColision((int)Side.UP)) ver = Mathf.Min(0, ver);
 
-        Vector3 movevector = new Vector3(hor,ver);
-        if (movevector.sqrMagnitude == 0) return;
-        if (movevector.sqrMagnitude > 1f) movevector = movevector.normalized;
+        Vector3 moveVector = new Vector3(hor, ver).normalized;
 
-        trans.position += movevector*Time.deltaTime*_moveSpeed;
-        
+        trans.position += moveVector * Time.deltaTime * speed;
+
     }
+
     void Update()
     {
-        MovePlayer();
-
-
-        
+        Move();
     }
-
-
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, AttackRange);
+
         Vector2 begin, end;
         Gizmos.color = Color.blue;
 
@@ -91,5 +97,4 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(begin, end);
 
     }
-
 }
