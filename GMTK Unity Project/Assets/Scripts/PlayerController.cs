@@ -5,16 +5,33 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
+    [SerializeField] private int MaxHp;
+    [SerializeField] private float imunity;
 
+    [SerializeField] private Transform Rotator;
+    [SerializeField] private Transform shootingPoint;
+    [SerializeField] private GameObject bullet;
+    [HideInInspector] public int hp;
     [Header("Collison")]
     public List<float> Offset;
     public List<float> Length;
 
+    private float imunetm;
     private enum Side { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
     private Transform trans;
+    private Camera cam;
     void Start()
     {
+        cam = Camera.main;
+        hp = MaxHp;
         trans = transform;
+    }
+
+    public void takeDamage(int dmg)
+    {
+        if (imunetm > 0) return;
+        imunetm = imunity;
+        hp -= dmg;
     }
     private bool CheckColision(int side)
     {
@@ -62,11 +79,21 @@ public class PlayerController : MonoBehaviour
         trans.position += movevector*Time.deltaTime*_moveSpeed;
         
     }
+
+    private void Rotate()
+    {
+        Vector3 mousepos = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 dis = mousepos - trans.position;
+        float angle = Mathf.Atan2(dis.y, dis.x) * Mathf.Rad2Deg;
+        angle %= 360;
+        Rotator.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+    }
+
     void Update()
     {
         MovePlayer();
-
-
+        if(imunetm > 0) imunetm -= Time.deltaTime;
+        Rotate();
         
     }
 
@@ -89,7 +116,6 @@ public class PlayerController : MonoBehaviour
         begin = new Vector2(transform.position.x - Offset[3], transform.position.y - Length[3]);
         end = new Vector2(transform.position.x - Offset[3], transform.position.y + Length[3]);
         Gizmos.DrawLine(begin, end);
-
     }
 
 }

@@ -6,8 +6,14 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float AttackRange;
+    [SerializeField] private float AttackRate;
+    [SerializeField] private int Damage;
+
     private GameObject player;
+    private PlayerController plc;
     private Transform trans;
+    private float tm;
+
 
     [Header("Collison")]
     public List<float> Offset;
@@ -19,6 +25,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        plc = player.GetComponent<PlayerController>();
         trans = transform;
     }
 
@@ -69,10 +76,25 @@ public class EnemyController : MonoBehaviour
         trans.position += moveVector * Time.deltaTime * speed;
 
     }
+    private void Attack()
+    {
+        if (!player) return;
+        Vector3 dest = player.transform.position;
+        Vector3 dir = dest - trans.position;
+        if (dir.sqrMagnitude > AttackRange * AttackRange) return;
+        if (tm > 0) 
+        {
+            tm -= Time.deltaTime;
+            return;
+        }
+        tm = AttackRate;
+        plc.takeDamage(Damage);
+    }
 
     void Update()
     {
         Move();
+        Attack();
     }
 
     private void OnDrawGizmosSelected()
