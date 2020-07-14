@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform Rotator;
     [SerializeField] private Transform shootingPoint;
     [SerializeField] private GameObject bullet;
+    [SerializeField] private GameObject book;
+
     [HideInInspector] public int hp;
     [Header("Collison")]
     public List<float> Offset;
@@ -97,6 +99,16 @@ public class PlayerController : MonoBehaviour
         Vector3 dis = mousepos - trans.position;
         float angle = Mathf.Atan2(dis.y, dis.x) * Mathf.Rad2Deg;
         angle %= 360;
+        if (angle > -90 || angle < 90)
+        {
+            book.transform.rotation = Quaternion.Euler(0f, 0f,angle+50f);
+            book.transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        if (angle < -90 || angle > 90)
+        {
+            book.transform.rotation = Quaternion.Euler(0f, 0f, angle+120f);
+            book.transform.localScale = new Vector3(-1f, 1f, 1f);
+        }
         Rotator.transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 

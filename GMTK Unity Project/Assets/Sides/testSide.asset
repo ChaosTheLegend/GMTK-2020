@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SideSprite: {fileID: 0}
   id: 0
-  Name: 
+  Name: testmessage
   Description: 

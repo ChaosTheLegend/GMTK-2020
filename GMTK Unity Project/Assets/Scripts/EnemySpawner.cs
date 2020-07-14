@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
 
     private bool isSpawning = false;
     private bool inProgress = false;
-    private int waveId = 0;
+    private int waveId = -1;
     private List<GameObject> SpawnQueue;
     private float tm;
 
@@ -21,6 +21,8 @@ public class EnemySpawner : MonoBehaviour
     }
     public void StartWave()
     {
+        if (Waves.Length - 1 <= waveId) return;
+        waveId++;
         SpawnQueue = new List<GameObject>();
         inProgress = true;
         isSpawning = true;
@@ -63,11 +65,6 @@ public class EnemySpawner : MonoBehaviour
     }
     void Update()
     {
-        if(!inProgress && Waves.Length-1 > waveId)
-        {
-            waveId++;
-            StartWave();
-        }
 
         if (!isSpawning) {
             if (!inProgress) return;
